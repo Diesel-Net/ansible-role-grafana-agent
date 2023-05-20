@@ -1,6 +1,6 @@
 galaxy_info:
   author: Thomas Daley
-  description: Installs grafana-agent for streaming metrics and host-level logs to OCC's Prometheus/Lokie instances respectively.
+  description: Installs grafana-agent for streaming host/docker metrics/logs to Prometheus/Loki instances respectively.
 
   min_ansible_vesion: 2.14
   platforms:
