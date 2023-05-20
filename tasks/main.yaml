@@ -1,0 +1,8 @@
+- include_role:
+    name: application
+
+- include_role:
+    name: docker
+
+- include_tasks: configure.yaml
+- include_tasks: deploy.yaml

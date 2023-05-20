@@ -1,0 +1,12 @@
+- include_role:
+    name: application
+    tasks_from: make_config_dir
+
+- include_role:
+    name: application
+    tasks_from: make_data_dir
+
+- name: Render agent.yaml to {{ config_dir }}/agent.yaml
+  template:
+    src: agent.yaml
+    dest: '{{ config_dir }}/agent.yaml'

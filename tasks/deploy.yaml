@@ -1,0 +1,9 @@
+- include_role:
+    name: docker
+    tasks_from: stack_deploy
+
+- include_role:
+    name: docker
+    tasks_from: service_update
+  vars:
+    options: --force
