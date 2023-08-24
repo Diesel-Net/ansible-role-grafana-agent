@@ -1,0 +1,8 @@
+# defaults
+loki_url: https://loki.diesel.net
+loki_username: loki
+loki_password: loki
+
+prometheus_url: https://prometheus.diesel.net
+prometheus_username: prom
+prometheus_password: prom

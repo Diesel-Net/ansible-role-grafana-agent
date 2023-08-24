@@ -1,0 +1,29 @@
+galaxy_info:
+  author: Thomas Daley
+  description: Installs grafana-agent for streaming host/docker metrics/logs to Prometheus/Loki instances respectively.
+
+  min_ansible_vesion: 2.14
+  platforms:
+    - name: Ubuntu
+      versions:
+        - 18.04
+        - 20.04
+
+  galaxy_tags:
+    - ubuntu
+    - docker
+    - grafana-agent
+    - logging
+    - grafana
+
+  dependencies:
+
+    - name: application
+      scm: git
+      src: "git@github.com:Diesel-Net/ansible-role-application.git"
+      version: 2.1.1
+
+    - name: docker
+      scm: git
+      src: "git@github.com:Diesel-Net/ansible-role-docker.git"
+      version: 2.0.4

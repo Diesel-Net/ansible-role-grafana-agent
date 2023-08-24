@@ -1,0 +1,14 @@
+- include_role:
+    name: docker
+    tasks_from: stack_deploy
+  vars:
+    app_name: grafana-agent
+
+- include_role:
+    name: docker
+    tasks_from: service_update
+  vars:
+    options: --force
+    app_name: grafana-agent
+    docker_service: daemon
+    

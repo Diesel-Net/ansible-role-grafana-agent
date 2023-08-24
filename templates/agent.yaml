@@ -1,0 +1,88 @@
+# https://grafana.com/docs/agent/latest/configuration/create-config-file/
+
+server:
+  log_level: info
+
+logs:
+  positions_directory: /etc/agent/data/pos
+  configs:
+    # https://grafana.com/docs/loki/latest/clients/promtail/configuration/#clients
+    - name: logs
+      clients:
+        - url: '{{ loki_url }}/loki/api/v1/push'
+          basic_auth:
+            username: '{{ loki_username }}'
+            password: '{{ loki_password }}'
+          external_labels:
+            environment: '{{ version }}'
+            vm_hostname: '{{ inventory_hostname }}'
+      scrape_configs:
+        
+        # tail files under /var/log
+        - job_name: system
+          pipeline_stages:
+          static_configs:
+            - labels:
+                job: varlogs
+                # "__path__" ends up creating label: "filename" /shrug
+                __path__: /var/log/*.log # path matching uses a third party library: https://github.com/bmatcuk/doubles
+
+        # tail systemd logs per (unit)
+        - job_name: journal
+          journal:
+            path: /var/log/journal
+            max_age: 30m
+            labels:
+              job: systemd-journal
+          relabel_configs:
+            - source_labels: 
+                - '__journal__systemd_unit'
+              target_label: 'unit'
+
+metrics:
+  wal_directory: /etc/agent/data/wal
+  global:
+    scrape_interval: 15s
+    external_labels:
+      # Add the same custom labels that fluentd is also sending to Loki
+      environment: '{{ version }}'
+      vm_hostname: '{{ inventory_hostname }}'
+    remote_write:
+      - url: '{{ prometheus_url }}/api/v1/write'
+        basic_auth:
+          username: '{{ prometheus_username }}'
+          password: '{{ prometheus_password }}'
+
+integrations:
+  # https://grafana.com/docs/agent/latest/configuration/integrations/node-exporter-config/
+  node_exporter:
+    enabled: true
+    rootfs_path: /rootfs
+    sysfs_path: /sys
+    procfs_path: /host/proc
+
+
+  cadvisor:
+    enabled: true
+    store_container_labels: true
+    docker: unix:///var/run/docker.sock
+    docker_only: true
+
+    # relabel the docker labels that we care about
+    metric_relabel_configs:
+  
+      - action: replace
+        source_labels: [container_label_com_docker_swarm_service_name]
+        target_label: service_name
+
+      - action: replace
+        source_labels: [name]
+        target_label: container_name
+
+      - action: replace
+        source_labels: [container_label_com_docker_stack_namespace]
+        target_label: namespace
+
+      # drop any leftover "docker label" labels
+      - action: labeldrop
+        regex: ^container_label_.*$
