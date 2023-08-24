@@ -1,12 +1,18 @@
 - include_role:
     name: application
     tasks_from: make_config_dir
+  vars:
+    app_name: grafana-agent
 
 - include_role:
     name: application
     tasks_from: make_data_dir
+  vars:
+    app_name: grafana-agent
 
 - name: Render agent.yaml to {{ config_dir }}/agent.yaml
   template:
     src: agent.yaml
     dest: '{{ config_dir }}/agent.yaml'
+  vars:
+    app_name: grafana-agent

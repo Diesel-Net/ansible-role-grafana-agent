@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   # https://grafana.com/docs/agent/latest/set-up/install-agent-docker/
-  {{ docker_service }}:
+  daemon:
     image: grafana/agent:v0.25.1
     hostname: '{{ inventory_hostname }}'
     volumes:
