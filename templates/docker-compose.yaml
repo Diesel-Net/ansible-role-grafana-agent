@@ -3,7 +3,7 @@ services:
 
   # https://grafana.com/docs/agent/latest/set-up/install-agent-docker/
   daemon:
-    image: grafana/agent:v0.25.1
+    image: grafana/agent:v0.38.1
     hostname: '{{ inventory_hostname }}'
     volumes:
       - '/etc/localtime:/etc/localtime'
