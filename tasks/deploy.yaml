@@ -8,7 +8,7 @@
     name: docker
     tasks_from: service_update
   vars:
-    options: --force
+    opts: --force
     app_name: grafana-agent
     docker_service: daemon
     
